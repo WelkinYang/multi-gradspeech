@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Multi-GradSpeech</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Cabin:700">
+    <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
+    <script src="https://unpkg.com/wavesurfer.js@7"></script>
+    <!-- timeline plugin -->
+    <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/timeline.esm.js"></script>
+    <!-- load wav -->
+    <script src="assets/js/wavplayer.js"></script>
+</head>
+
+<body id="page-top" data-bs-spy="scroll" data-bs-target="#mainNav" data-bs-offset="77" style="background: var(--bs-gray-100);--bs-body-color: var(--bs-dark);">
+    <nav class="navbar navbar-light navbar-expand-md fixed-top" id="mainNav">
+        <a href="https://fuxi.163.com/"><img id="logo" src="assets/img/logo.png" style="padding-left: 20px;"></img>
+        </a>
+        </a>
+        <div class="container"><button data-bs-toggle="collapse" class="navbar-toggler navbar-toggler-right" data-bs-target="#navbarResponsive" type="button" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation" value="Menu"><i class="fa fa-bars"></i></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item nav-link"><a class="nav-link" href="#about">ABSTRACT</a></li>
+                    <li class="nav-item nav-link"><a class="nav-link" href="#demo">DEMO</a></li>
+                    <li class="nav-item nav-link"><a class="nav-link" href="#contact">contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <header class="masthead" style="background: url(&quot;assets/img/head-bg.jpg&quot;) top / cover no-repeat;height: 761px;">
+        <div class="intro-body">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <h1 class="brand-heading" style="font-size: 90px;color: var(--bs-dark);">Multi-GradSpeech</h1>
+                        <p class="intro-text" style="color: var(--bs-dark);">Multi-GradSpeech: Towards Diffusion-based Multi-Speaker Text-to-speech Using Consistent Diffusion Models</p>
+                        <p class="intro-text" style="font-size: 20px;color: var(--bs-dark);"> Heyang Xue, Shuai Guo, Pengcheng Zhu, Mengxiao Bi <br> 
+                             Fuxi AI Lab, NetEase Inc., Hangzhou, China</p>
+                    </div>
+                    <div class="col-lg-5 d-flex flex-row justify-content-around mx-auto" style="font-size: 22px;color: var(--bs-blue);">
+                        <a href="https://arxiv.org/abs/2203.16408">arxiv</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div style="background: url(&quot;assets/img/body-bg.jpg&quot;);">
+        <section class="text-center content-section" id="about" style="color: var(--bs-body-color);padding: 150px 0px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <h2>ABSTRACT</h2>
+                        <p>Recent advancements in diffusion-based acoustic models have revolutionized data-sufficient single-speaker Text-to-Speech~(TTS) approaches, with Grad-TTS being a prime example. However, these methods struggle with multi-speaker TTS tasks, as data-sufficient speakers experience performance degradation in modeling, while data-insufficient speakers suffer from over-smoothing of generated results. Fine-tuning is a common technique to mitigate these issues. To specifically address multi-speaker TTS scenarios, we present Multi-GradSpeech, a diffusion-based acoustic model. Our approach introduces the Consistent Diffusion Model (CDM) as a generative modeling method for diffusion-based acoustic models. We enforce the consistency property of CDM during the inference process, resulting in significant improvements in multi-speaker TTS performance. Our experimental results corroborate that our proposed method can maintain or improve the performance of different speakers involved in multi-speaker TTS, even outperforming the fine-tuning approach.</p>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="text-center demo-section content-section" id="demo" style="color: var(--bs-body-color);background: transparent;padding: 150px 0px;">
+            <div class="container">
+                <div class="col-lg-10 mx-auto">
+                    <h1>DEMO</h1>
+                    <p>Experiment results on a internel multi-speaker Mandarin speech corpus where Speaker-S and Speaker-I stands for data-sufficient speaker and data-insufficient speaker respectively</p>
+                    <div><a class="btn" data-bs-toggle="collapse" aria-expanded="true" aria-controls="teacher" href="#teacher" role="button" style="width: 100%;background: var(--bs-gray-200);font-size: 22px;margin:10px 0px;">Text: 小(xiǎo)西(xī)原(yuán)本(běn)约(yuē)好(hǎo)陪(péi)着(zhe)表(biǎo)姐(jiě)一(yì)起(qǐ)来(lái)相(xiāng)亲(qīn), 表(biǎo)姐(jiě)却(què)因(yīn)为(wéi)胆(dǎn)小(xiǎo)爽(shuǎng)约(yuē)。</a>
+                        <div class="collapse show" id="teacher" style="border-width: 1px;">
+                            <div class="table-responsive" style="margin-top: 20px;">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="font-size: 20px;">Models</th>
+                                            <th style="font-size: 20px;">Results</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td valign="middle">(0) <i>Recording</i></td>
+                                            <td>
+                                                <div class="t0">
+                                                    <script>
+                                                        render(0, ".t0", 'assets/audio/Recording/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        <tr>
+                                            <td valign="middle">(1) <i>Grad-TTS Single-Speaker Speaker-S</i></td>
+                                            <td>
+                                                <div class="t1">
+                                                    <script>
+                                                        render(1, ".t1", 'assets/audio/GradTTS_SS_S-S/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(2) <i>Grad-TTS Multi-Speaker Speaker-S</i></td>
+                                            <td>
+                                                <div class="t2">
+                                                    <script>
+                                                        render(2, ".t2", 'assets/audio/GradTTS_MS_S-S/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(3) <i>Grad-TTS Fine-tune Speaker-S</i></td>
+                                            <td>
+                                                <div class="t3">
+                                                    <script>
+                                                        render(3, ".t3", 'assets/audio/GradTTS_FS_S-S/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(4) <i>Multi-GradSpeech Single Speaker Speaker-S</i></td>
+                                            <td>
+                                                <div class="t4">
+                                                    <script>
+                                                        render(4, ".t4", 'assets/audio/MultiGradSpeech_SS_S-S/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(5) <i>Multi-GradSpeech Multi Speaker Speaker-S</i></td>
+                                            <td>
+                                                <div class="t5">
+                                                    <script>
+                                                        render(5, ".t5", 'assets/audio/MultiGradSpeech_MS_S-S/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(6) <i>Multi-GradSpeech Fine-tune Speaker-S</i></td>
+                                            <td>
+                                                <div class="t6">
+                                                    <script>
+                                                        render(6, ".t6", 'assets/audio/MultiGradSpeech_FS_S-S/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(7) <i>Grad-TTS Single-Speaker Speaker-I</i></td>
+                                            <td>
+                                                <div class="t7">
+                                                    <script>
+                                                        render(7, ".t7", 'assets/audio/GradTTS_SS_S-I/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(8) <i>Grad-TTS Multi-Speaker Speaker-I</i></td>
+                                            <td>
+                                                <div class="t8">
+                                                    <script>
+                                                        render(8, ".t8", 'assets/audio/GradTTS_MS_S-I/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(9) <i>Grad-TTS Fine-tune Speaker-I</i></td>
+                                            <td>
+                                                <div class="t9">
+                                                    <script>
+                                                        render(9, ".t9", 'assets/audio/GradTTS_FS_S-I/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(10) <i>Multi-GradSpeech Single Speaker Speaker-I</i></td>
+                                            <td>
+                                                <div class="t10">
+                                                    <script>
+                                                        render(10, ".t10", 'assets/audio/MultiGradSpeech_SS_S-I/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(11) <i>Multi-GradSpeech Multi Speaker Speaker-I</i></td>
+                                            <td>
+                                                <div class="t11">
+                                                    <script>
+                                                        render(11, ".t11", 'assets/audio/MultiGradSpeech_MS_S-I/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(12) <i>Multi-GradSpeech Fine-tune Speaker-I</i></td>
+                                            <td>
+                                                <div class="t12">
+                                                    <script>
+                                                        render(12, ".t12", 'assets/audio/MultiGradSpeech_FS_S-I/000563.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div><a class="btn" data-bs-toggle="collapse" aria-expanded="true" aria-controls="student1" href="#student1" role="button" style="width: 100%;background: var(--bs-gray-200);font-size: 22px;margin:10px 0px;">Text: 老(lǎo)人(rén)满(mǎn)头(tóu)白(bái)发(fà)，身(shēn)子(zi)骨(gǔ)还(hái)算(suàn)硬(yìng)朗(lǎng)，只(zhǐ)是(shì)有(yǒu)些(xiē)耳(ěr)聋(lóng)。</a>
+                        <div class="collapse show" id="student1" style="border-width: 1px;">
+                            <div class="table-responsive" style="margin-top: 20px;">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="font-size: 20px;">Models</th>
+                                            <th style="font-size: 20px;">Results</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td valign="middle">(0) <i>Recording</i></td>
+                                            <td>
+                                                <div class="t13">
+                                                    <script>
+                                                        render(13, ".t13", 'assets/audio/Recording/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        <tr>
+                                            <td valign="middle">(1) <i>Grad-TTS Single-Speaker Speaker-S</i></td>
+                                            <td>
+                                                <div class="t14">
+                                                    <script>
+                                                        render(14, ".t14", 'assets/audio/GradTTS_SS_S-S/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(2) <i>Grad-TTS Multi-Speaker Speaker-S</i></td>
+                                            <td>
+                                                <div class="t15">
+                                                    <script>
+                                                        render(15, ".t15", 'assets/audio/GradTTS_MS_S-S/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(3) <i>Grad-TTS Fine-tune Speaker-S</i></td>
+                                            <td>
+                                                <div class="t16">
+                                                    <script>
+                                                        render(16, ".t16", 'assets/audio/GradTTS_FS_S-S/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(4) <i>Multi-GradSpeech Single Speaker Speaker-S</i></td>
+                                            <td>
+                                                <div class="t17">
+                                                    <script>
+                                                        render(17, ".t17", 'assets/audio/MultiGradSpeech_SS_S-S/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(5) <i>Multi-GradSpeech Multi Speaker Speaker-S</i></td>
+                                            <td>
+                                                <div class="t5">
+                                                    <script>
+                                                        render(18, ".t18", 'assets/audio/MultiGradSpeech_MS_S-S/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(6) <i>Multi-GradSpeech Fine-tune Speaker-S</i></td>
+                                            <td>
+                                                <div class="t19">
+                                                    <script>
+                                                        render(19, ".t19", 'assets/audio/MultiGradSpeech_FS_S-S/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(7) <i>Grad-TTS Single-Speaker Speaker-I</i></td>
+                                            <td>
+                                                <div class="t20">
+                                                    <script>
+                                                        render(20, ".t20", 'assets/audio/GradTTS_SS_S-I/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(8) <i>Grad-TTS Multi-Speaker Speaker-I</i></td>
+                                            <td>
+                                                <div class="t21">
+                                                    <script>
+                                                        render(21, ".t21", 'assets/audio/GradTTS_MS_S-I/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(9) <i>Grad-TTS Fine-tune Speaker-I</i></td>
+                                            <td>
+                                                <div class="t22">
+                                                    <script>
+                                                        render(22, ".t22", 'assets/audio/GradTTS_FS_S-I/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(10) <i>Multi-GradSpeech Single Speaker Speaker-I</i></td>
+                                            <td>
+                                                <div class="t23">
+                                                    <script>
+                                                        render(23, ".t23", 'assets/audio/MultiGradSpeech_SS_S-I/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(11) <i>Multi-GradSpeech Multi Speaker Speaker-I</i></td>
+                                            <td>
+                                                <div class="t24">
+                                                    <script>
+                                                        render(24, ".t24", 'assets/audio/MultiGradSpeech_MS_S-I/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(12) <i>Multi-GradSpeech Fine-tune Speaker-I</i></td>
+                                            <td>
+                                                <div class="t25">
+                                                    <script>
+                                                        render(25, ".t25", 'assets/audio/MultiGradSpeech_FS_S-I/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div><a class="btn" data-bs-toggle="collapse" aria-expanded="true" aria-controls="student2" href="#student2" role="button" style="width: 100%;background: var(--bs-gray-200);font-size: 22px;margin:10px 0px;">Text: 不(bú)过(guò)，梦(mèng)想(xiǎng)着(zhe)一(yī)夜(yè)暴(bào)富(fù)的(de)他(tā)开(kāi)始(shǐ)炒(chǎo)股(gǔ)，不(bú)料(liào)，血(xuè)本(běn)无(wú)归(guī)。<br></a>
+                        <div class="collapse show" id="student2" style="border-width: 1px;">
+                            <div class="table-responsive" style="margin-top: 20px;">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th style="font-size: 20px;">Models</th>
+                                            <th style="font-size: 20px;">Results</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td valign="middle">(0) <i>Recording</i></td>
+                                            <td>
+                                                <div class="t26">
+                                                    <script>
+                                                        render(26, ".t26", 'assets/audio/Recording/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                        <tr>
+                                            <td valign="middle">(1) <i>Grad-TTS Single-Speaker Speaker-S</i></td>
+                                            <td>
+                                                <div class="t27">
+                                                    <script>
+                                                        render(27, ".t27", 'assets/audio/GradTTS_SS_S-S/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(2) <i>Grad-TTS Multi-Speaker Speaker-S</i></td>
+                                            <td>
+                                                <div class="t28">
+                                                    <script>
+                                                        render(28, ".t28", 'assets/audio/GradTTS_MS_S-S/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(3) <i>Grad-TTS Fine-tune Speaker-S</i></td>
+                                            <td>
+                                                <div class="t29">
+                                                    <script>
+                                                        render(29, ".t29", 'assets/audio/GradTTS_FS_S-S/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(4) <i>Multi-GradSpeech Single Speaker Speaker-S</i></td>
+                                            <td>
+                                                <div class="t30">
+                                                    <script>
+                                                        render(30, ".t30", 'assets/audio/MultiGradSpeech_SS_S-S/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(5) <i>Multi-GradSpeech Multi Speaker Speaker-S</i></td>
+                                            <td>
+                                                <div class="t5">
+                                                    <script>
+                                                        render(31, ".t31", 'assets/audio/MultiGradSpeech_MS_S-S/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(6) <i>Multi-GradSpeech Fine-tune Speaker-S</i></td>
+                                            <td>
+                                                <div class="t32">
+                                                    <script>
+                                                        render(32, ".t32", 'assets/audio/MultiGradSpeech_FS_S-S/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(7) <i>Grad-TTS Single-Speaker Speaker-I</i></td>
+                                            <td>
+                                                <div class="t33">
+                                                    <script>
+                                                        render(33, ".t33", 'assets/audio/GradTTS_SS_S-I/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(8) <i>Grad-TTS Multi-Speaker Speaker-I</i></td>
+                                            <td>
+                                                <div class="t34">
+                                                    <script>
+                                                        render(34, ".t34", 'assets/audio/GradTTS_MS_S-I/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(9) <i>Grad-TTS Fine-tune Speaker-I</i></td>
+                                            <td>
+                                                <div class="t35">
+                                                    <script>
+                                                        render(35, ".t35", 'assets/audio/GradTTS_FS_S-I/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(10) <i>Multi-GradSpeech Single Speaker Speaker-I</i></td>
+                                            <td>
+                                                <div class="t36">
+                                                    <script>
+                                                        render(36, ".t36", 'assets/audio/MultiGradSpeech_SS_S-I/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(11) <i>Multi-GradSpeech Multi Speaker Speaker-I</i></td>
+                                            <td>
+                                                <div class="t37">
+                                                    <script>
+                                                        render(37, ".t37", 'assets/audio/MultiGradSpeech_MS_S-I/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td valign="middle">(12) <i>Multi-GradSpeech Fine-tune Speaker-I</i></td>
+                                            <td>
+                                                <div class="t38">
+                                                    <script>
+                                                        render(38, ".t38", 'assets/audio/MultiGradSpeech_FS_S-I/002670.wav');
+                                                    </script>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="text-center content-section" id="contact" style="color: var(--bs-body-color);padding: 100px 0px;">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 mx-auto">
+                        <h2>Contact</h2>
+                        <p>Email: geminiwelkin@gmail.com, xueheyang@corp.netease.com</p>
+
+                        <ul class="list-inline banner-social-buttons">
+                            <!-- <li class="list-inline-item">&nbsp;<button class="btn btn-primary btn-lg btn-default" type="button"><i class="fa fa-envelope-o fa-fw"></i><span -->
+                            <!-- class="network-name">&nbsp; GMail</span></button></li> -->
+                            <!-- <li class="list-inline-item">&nbsp;<button class="btn btn-primary btn-lg btn-default" type="button"><i class="fa fa-twitter fa-fw"></i><span -->
+                            <!-- class="network-name">&nbsp;Twitter</span></button></li> -->
+                            <li class="list-inline-item">&nbsp;<button onclick="location.href='https://github.com/WelkinYang'" class="btn btn-primary btn-lg btn-default" type="button"><i class="fa fa-github fa-fw"></i><span
+                                        class="network-name">&nbsp;Github</span></button></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <footer style="background: url(&quot;assets/img/foot-bg.jpg&quot;);">
+        <div class="container text-center">
+            <p></p>
+        </div>
+    </footer>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/grayscale.js"></script>
+</body>
+
+</html>
